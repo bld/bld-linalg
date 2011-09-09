@@ -23,21 +23,24 @@
 	  (setf (aref b j i) (aref a i j))))
       b)))
 
-(defun m+2 (a b)
+(defmeth2 + ((a array) (b array))
+  (assert (equal (array-dimensions a) (array-dimensions b)))
   (destructuring-bind (m n) (array-dimensions a)
     (let ((c (make-array (list m n))))
       (dotimes (i (* m n))
 	(setf (row-major-aref c i) (+ (row-major-aref a i) (row-major-aref b i))))
       c)))
-
-(defun m*s (a s)
+  
+(defmeth2 * ((a array) (s number))
   (destructuring-bind (m n) (array-dimensions a)
     (let ((b (make-array (list m n))))
       (dotimes (i (* m n))
 	(setf (row-major-aref b i) (* (row-major-aref a i) s)))
       b)))
+(defmeth2 * ((s number) (a array))
+  (* a s))
 
-(defun m*2 (a b)
+(defmeth2 * ((a array) (b array))
   (destructuring-bind (m p) (array-dimensions a)
     (destructuring-bind (p n) (array-dimensions b)
       (let ((c (make-array (list m n))))

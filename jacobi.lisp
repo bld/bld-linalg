@@ -37,6 +37,6 @@
 	       do (loop for q from (1+ p) below n
 		     for (c s) = (symschur2 a p q)
 		     for j = (j n p q c s)
-		     do (setq a (m*2 (m*2 (transpose j) a) j))
-		     do (setq v (m*2 v j)))))
+		     do (setq a (* (* (transpose j) a) j))
+		     do (setq v (* v j)))))
       (values a v))))
