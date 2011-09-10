@@ -9,4 +9,4 @@
 			  asinh acosh atanh
 			  log exp sqrt abs
 			  min max signum)
-  (:export eye normf transpose + * copya jacobi))
+  (:export eye normf transpose + * copya jacobi diag))

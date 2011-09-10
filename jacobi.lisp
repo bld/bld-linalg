@@ -27,7 +27,7 @@
     (setf (aref m q p) (- s))
     m))
 
-(defun jacobi (ain tol)
+(defun jacobi (ain &optional (tol 1d-6))
   (destructuring-bind (m n) (array-dimensions ain)
     (let ((a (copya ain))
 	  (v (eye n))
@@ -39,4 +39,4 @@
 		     for j = (j n p q c s)
 		     do (setq a (* (* (transpose j) a) j))
 		     do (setq v (* v j)))))
-      (values a v))))
+      (values (diag a) v))))

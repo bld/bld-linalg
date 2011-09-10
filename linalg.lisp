@@ -57,3 +57,10 @@
     (dotimes (i (reduce #'* dim))
       (setf (row-major-aref acpy i) (row-major-aref a i)))
     acpy))
+
+(defun diag (a)
+  (destructuring-bind (m n) (array-dimensions a)
+    (let ((v (make-array (min m n))))
+      (loop for i below (min m n)
+	 do (setf (aref v i) (aref a i i)))
+      v)))
