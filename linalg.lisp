@@ -64,3 +64,25 @@
       (loop for i below (min m n)
 	 do (setf (aref v i) (aref a i i)))
       v)))
+
+(defun column-vector (&rest args)
+  (make-array (list (length args) 1) :initial-contents (mapcar #'list args)))
+
+(defun row-vector (&rest args)
+  (make-array (list 1 (length args)) :initial-contents (list args)))
+
+(defun subm (a rows cols)
+  (make-array 
+   (list (length rows) (length cols))
+   :initial-contents
+   (loop for row in rows
+      collect (loop for col in cols
+		 collect (aref a row col)))))
+
+(defun setsubm (a rows cols b)
+  (loop for row in rows
+     for rowi = 0 then (incf rowi)
+     do (loop for col in cols
+	   for coli = 0 then (incf coli)
+	     do (setf (aref a row col) (aref b rowi coli))))
+  a)
