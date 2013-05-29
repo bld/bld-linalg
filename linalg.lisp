@@ -86,3 +86,17 @@
 	   for coli = 0 then (incf coli)
 	     do (setf (aref a row col) (aref b rowi coli))))
   a)
+
+(defun mapm (fn &rest ms)
+  "Map a function across the elements of matrices of the same dimension"
+  (destructuring-bind (r c) (array-dimensions (first ms))
+    (let ((mout (make-array (list r c))))
+      (dotimes (ri r)
+	(dotimes (ci c)
+	  (setf (aref mout ri ci) 
+		(apply fn (mapcar #'(lambda (m) (aref m ri ci)) ms)))))
+      mout)))
+    
+(defmeth12 - ((a array) (b array))
+  ((mapm #'- a))
+  ((mapm #'- a b)))
