@@ -3,6 +3,8 @@
   :author "Ben Diedrich <bldiedrich@gmail.com>"
   :license "Mozilla Public License"
   :depends-on ("bld-gen")
+  :serial t
   :components ((:file "package")
-	       (:file "linalg" :depends-on ("package"))
-	       (:file "jacobi" :depends-on ("linalg"))))
+	       (:file "linalg")
+	       (:file "jacobi")
+	       (:file "lu")))
