@@ -100,3 +100,18 @@
 (defmeth12 - ((a array) (b array))
   ((mapm #'- a))
   ((mapm #'- a b)))
+
+(defun row-vector-to-list (v)
+  (loop for i below (second (array-dimensions v))
+     collect (aref v 0 i)))
+
+(defun col-vec-to-list (v)
+  (loop for i below (first (array-dimensions v))
+     collect (aref v i 0)))
+
+(defun 2dvector-to-list (v)
+  (let ((dim (array-dimensions v)))
+    (cond
+      ((= (first dim) 1) (row-vector-to-list v))
+      ((= (second dim) 1) (col-vec-to-list v))
+      (t (warn "Not a 2d vector") nil))))

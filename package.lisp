@@ -9,4 +9,4 @@
 			  asinh acosh atanh
 			  log exp sqrt abs
 			  min max signum)
-  (:export eye normf transpose + * copya jacobi diag column-vector row-vector subm setsubm mapm for-subs-row back-subs-row outer-prod-gauss-elim inverse))
+  (:export eye normf transpose + * copya jacobi diag column-vector row-vector subm setsubm mapm for-subs-row back-subs-row outer-prod-gauss-elim inverse row-vector-to-list col-vec-to-list 2dvector-to-list))
