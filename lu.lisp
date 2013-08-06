@@ -1,4 +1,6 @@
 ;;; LU factorization & matrix inverses
+;; Algorithms from "Matrix Computations" by Golub and Van Loan
+;; 
 
 (in-package :bld-linalg)
 
@@ -51,7 +53,7 @@
     (values a l u)))
 
 (defun inverse (a &optional (n (apply #'min (array-dimensions a))))
-  "Inverse of square 2D array A"
+  "Inverse of square 2D array"
   (assert (apply #'= (array-dimensions a)))
   (let ((ainv (make-array (list n n)))
 	(b (eye n))
