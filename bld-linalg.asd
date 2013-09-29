@@ -7,5 +7,4 @@
   :components ((:file "package")
 	       (:file "linalg")
 	       (:file "jacobi")
-	       (:file "lu")
-	       (:file "gj")))
+	       (:file "lu")))
