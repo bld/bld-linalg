@@ -1,7 +1,7 @@
 (asdf:defsystem :bld-linalg
   :description "Linear algebra with 2D arrays"
   :author "Ben Diedrich <bldiedrich@gmail.com>"
-  :license "Mozilla Public License"
+  :license "MIT"
   :depends-on ("bld-gen")
   :serial t
   :components ((:file "package")
