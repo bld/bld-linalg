@@ -16,6 +16,7 @@
 	     sum (expt (abs (aref a i j)) 2)))))
 
 (defun transpose (a)
+  "Transpose a matrix"
   (destructuring-bind (m n) (array-dimensions a)
     (let ((b (make-array (list n m))))
       (dotimes (i m)
@@ -52,6 +53,7 @@
 	c))))
 
 (defun copya (a)
+  "Copy 2D array"
   (let* ((dim (array-dimensions a))
 	 (acpy (make-array dim)))
     (dotimes (i (reduce #'* dim))
@@ -59,6 +61,7 @@
     acpy))
 
 (defun diag (a)
+  "Pull out the diagonal of an array into a 1D vector"
   (destructuring-bind (m n) (array-dimensions a)
     (let ((v (make-array (min m n))))
       (loop for i below (min m n)
@@ -66,12 +69,15 @@
       v)))
 
 (defun column-vector (&rest args)
+  "Create a column vector as 2D array"
   (make-array (list (length args) 1) :initial-contents (mapcar #'list args)))
 
 (defun row-vector (&rest args)
+  "Create a row vector as 2D array"
   (make-array (list 1 (length args)) :initial-contents (list args)))
 
 (defun subm (a rows cols)
+  "Sub matrix given list of rows and columns"
   (make-array 
    (list (length rows) (length cols))
    :initial-contents
@@ -80,6 +86,7 @@
 		 collect (aref a row col)))))
 
 (defun setsubm (a rows cols b)
+  "Set the specified rows and columns of matrix A to those of B"
   (loop for row in rows
      for rowi = 0 then (incf rowi)
      do (loop for col in cols
@@ -102,14 +109,17 @@
   ((mapm #'- a b)))
 
 (defun row-vector-to-list (v)
+  "Turn a 2D array row vector into a list"
   (loop for i below (second (array-dimensions v))
      collect (aref v 0 i)))
 
 (defun col-vec-to-list (v)
+  "Turn a 2D array column vector into a list"
   (loop for i below (first (array-dimensions v))
      collect (aref v i 0)))
 
 (defun 2dvector-to-list (v)
+  "Turn a 2D array row or column vector into a list"
   (let ((dim (array-dimensions v)))
     (cond
       ((= (first dim) 1) (row-vector-to-list v))
