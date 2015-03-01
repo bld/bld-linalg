@@ -2,7 +2,7 @@
 
 (defun eye (n)
   "Identity matrix"
-  (let ((m (make-array (list n n))))
+  (let ((m (make-array (list n n) :initial-element 0)))
     (dotimes (i n)
       (setf (aref m i i) 1))
     m))
