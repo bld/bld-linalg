@@ -2,7 +2,7 @@
 
 (defun eye (n)
   "Identity matrix"
-  (let ((m (make-array (list n n))))
+  (let ((m (make-array (list n n) :initial-element 0)))
     (dotimes (i n)
       (setf (aref m i i) 1))
     m))
@@ -18,7 +18,7 @@
 (defun transpose (a)
   "Transpose a matrix"
   (destructuring-bind (m n) (array-dimensions a)
-    (let ((b (make-array (list n m))))
+    (let ((b (make-array (list n m) :initial-element 0)))
       (dotimes (i m)
 	(dotimes (j n)
 	  (setf (aref b j i) (aref a i j))))
@@ -27,14 +27,14 @@
 (defmeth2 + ((a array) (b array))
   (assert (equal (array-dimensions a) (array-dimensions b)))
   (destructuring-bind (m n) (array-dimensions a)
-    (let ((c (make-array (list m n))))
+    (let ((c (make-array (list m n) :initial-element 0)))
       (dotimes (i (* m n))
 	(setf (row-major-aref c i) (+ (row-major-aref a i) (row-major-aref b i))))
       c)))
   
 (defmeth2 * ((a array) (s number))
   (destructuring-bind (m n) (array-dimensions a)
-    (let ((b (make-array (list m n))))
+    (let ((b (make-array (list m n) :initial-element 0)))
       (dotimes (i (* m n))
 	(setf (row-major-aref b i) (* (row-major-aref a i) s)))
       b)))
@@ -44,7 +44,7 @@
 (defmeth2 * ((a array) (b array))
   (destructuring-bind (m p) (array-dimensions a)
     (destructuring-bind (p n) (array-dimensions b)
-      (let ((c (make-array (list m n))))
+      (let ((c (make-array (list m n) :initial-element 0)))
 	(dotimes (i m)
 	  (dotimes (j n)
 	    (setf (aref c i j) 
@@ -55,7 +55,7 @@
 (defun copya (a)
   "Copy 2D array"
   (let* ((dim (array-dimensions a))
-	 (acpy (make-array dim)))
+	 (acpy (make-array dim :initial-element 0)))
     (dotimes (i (reduce #'* dim))
       (setf (row-major-aref acpy i) (row-major-aref a i)))
     acpy))
@@ -63,7 +63,7 @@
 (defun diag (a)
   "Pull out the diagonal of an array into a 1D vector"
   (destructuring-bind (m n) (array-dimensions a)
-    (let ((v (make-array (min m n))))
+    (let ((v (make-array (min m n) :initial-element 0)))
       (loop for i below (min m n)
 	 do (setf (aref v i) (aref a i i)))
       v)))
@@ -97,7 +97,7 @@
 (defun mapm (fn &rest ms)
   "Map a function across the elements of matrices of the same dimension"
   (destructuring-bind (r c) (array-dimensions (first ms))
-    (let ((mout (make-array (list r c))))
+    (let ((mout (make-array (list r c) :initial-element 0)))
       (dotimes (ri r)
 	(dotimes (ci c)
 	  (setf (aref mout ri ci) 
