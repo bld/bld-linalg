@@ -26,18 +26,19 @@
 
 (defmeth2 + ((a array) (b array))
   (assert (equal (array-dimensions a) (array-dimensions b)))
-  (destructuring-bind (m n) (array-dimensions a)
-    (let ((c (make-array (list m n) :initial-element 0)))
-      (dotimes (i (* m n))
-	(setf (row-major-aref c i) (+ (row-major-aref a i) (row-major-aref b i))))
-      c)))
-  
+  (let* ((dims (array-dimensions a))
+	 (c (make-array dims :initial-element 0)))
+    (dotimes (i (apply #'* dims))
+      (setf (row-major-aref c i) (+ (row-major-aref a i) (row-major-aref b i))))
+    c))
+
 (defmeth2 * ((a array) (s number))
-  (destructuring-bind (m n) (array-dimensions a)
-    (let ((b (make-array (list m n) :initial-element 0)))
-      (dotimes (i (* m n))
+  (let* ((dims (array-dimensions a))
+	 (b (make-array dims :initial-element 0)))
+      (dotimes (i (apply #'* dims))
 	(setf (row-major-aref b i) (* (row-major-aref a i) s)))
-      b)))
+      b))
+
 (defmeth2 * ((s number) (a array))
   (* a s))
 
