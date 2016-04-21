@@ -32,14 +32,14 @@
       (setf (row-major-aref c i) (+ (row-major-aref a i) (row-major-aref b i))))
     c))
 
-(defmeth2 * ((a array) (s number))
+(defmeth2 * ((a array) (s t))
   (let* ((dims (array-dimensions a))
 	 (b (make-array dims :initial-element 0)))
       (dotimes (i (apply #'* dims))
 	(setf (row-major-aref b i) (* (row-major-aref a i) s)))
       b))
 
-(defmeth2 * ((s number) (a array))
+(defmeth2 * ((s t) (a array))
   (* a s))
 
 (defmeth2 * ((a array) (b array))
@@ -49,8 +49,10 @@
 	(dotimes (i m)
 	  (dotimes (j n)
 	    (setf (aref c i j) 
-		  (loop for k below p 
-		     sum (* (aref a i k) (aref b k j))))))
+		  (loop with summation = 0
+		     for k below p 
+		     do (setq summation (+ summation (* (aref a i k) (aref b k j))))
+		       finally (return summation)))))
 	c))))
 
 (defun copya (a)
@@ -126,3 +128,15 @@
       ((= (first dim) 1) (row-vector-to-list v))
       ((= (second dim) 1) (col-vec-to-list v))
       (t (warn "Not a 2d vector") nil))))
+
+(defun conjugate-transpose (m)
+  "Conjugate transpose of a matrix (2D array)"
+  (let* ((dims (array-dimensions m))
+	 (mc (make-array (reverse dims))))
+    (dotimes (i (second dims))
+      (dotimes (j (first dims))
+	(setf (aref mc i j) (conjugate (aref m j i)))))
+    mc))
+
+(defun hermetianp (m)
+  (equalp m (conjugate-transpose m)))
