@@ -140,3 +140,9 @@
 
 (defun hermetianp (m)
   (equalp m (conjugate-transpose m)))
+
+(defun rows (m)
+  (array-dimension m 0))
+
+(defun columns (m)
+  (array-dimension m 1))
