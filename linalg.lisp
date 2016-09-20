@@ -55,6 +55,9 @@
 		       finally (return summation)))))
 	c))))
 
+(defmeth2 / ((a array) (s t))
+  (* a (/ s)))
+
 (defun copya (a)
   "Copy 2D array"
   (let* ((dim (array-dimensions a))
@@ -63,13 +66,25 @@
       (setf (row-major-aref acpy i) (row-major-aref a i)))
     acpy))
 
-(defun diag (a)
+(defun get-diag (a)
   "Pull out the diagonal of an array into a 1D vector"
   (destructuring-bind (m n) (array-dimensions a)
     (let ((v (make-array (min m n) :initial-element 0)))
       (loop for i below (min m n)
 	 do (setf (aref v i) (aref a i i)))
       v)))
+
+(defun diag (a)
+  (get-diag a))
+
+(defun make-diag (&rest args)
+  "Create a diagonal array from arguments"
+  (let* ((n (length args))
+	 (m (make-array (list n n))))
+    (loop for a in args
+       for i below n
+       do (setf (aref m i i) a))
+    m))
 
 (defun column-vector (&rest args)
   "Create a column vector as 2D array"
@@ -146,3 +161,23 @@
 
 (defun columns (m)
   (array-dimension m 1))
+
+(defun cat-row (a b)
+  "Concatenate 2D arrays by row"
+  (destructuring-bind (row-a col-a) (array-dimensions a)
+    (destructuring-bind (row-b col-b) (array-dimensions b)
+      (assert (= col-a col-b))
+      (let ((c (make-array (list (+ row-a row-b) col-a)))
+       	    (size-a (* row-a col-a))
+	    (size-b (* row-b col-b)))
+      	(dotimes (i (+ size-a size-b))
+      	  (setf (row-major-aref c i)
+      		(if (< i size-a)
+      		    (row-major-aref a i)
+      		    (row-major-aref b (- i size-a)))))
+      	c))))
+
+(defun cat-col (a b)
+  "Concatenate 2D arrays by column"
+  (transpose (cat-row (transpose a) (transpose b))))
+
