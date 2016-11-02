@@ -77,6 +77,15 @@
 (defun diag (a)
   (get-diag a))
 
+(defun make-v-diag (v)
+  "Make a diagonal array from a vector"
+  (let* ((n (length v))
+	 (m (make-array (list n n))))
+    (loop for a across v
+       for i below n
+       do (setf (aref m i i) a))
+    m))
+
 (defun make-diag (&rest args)
   "Create a diagonal array from arguments"
   (let* ((n (length args))
@@ -95,13 +104,15 @@
   (make-array (list 1 (length args)) :initial-contents (list args)))
 
 (defun subm (a rows cols)
-  "Sub matrix given list of rows and columns"
-  (make-array 
-   (list (length rows) (length cols))
-   :initial-contents
-   (loop for row in rows
-      collect (loop for col in cols
-		 collect (aref a row col)))))
+  "Sub matrix given list of rows and columns. Select entire row or column if 't' provided instead of a list."
+  (let ((rows (if (listp rows) rows (loop for i below (array-dimension a 0) collect i)))
+	(cols (if (listp cols) cols (loop for j below (array-dimension a 1) collect j))))
+    (make-array 
+     (list (length rows) (length cols))
+     :initial-contents
+     (loop for row in rows
+	collect (loop for col in cols
+		   collect (aref a row col))))))
 
 (defun setsubm (a rows cols b)
   "Set the specified rows and columns of matrix A to those of B"
@@ -180,4 +191,7 @@
 (defun cat-col (a b)
   "Concatenate 2D arrays by column"
   (transpose (cat-row (transpose a) (transpose b))))
+
+(defun zeros (&rest dims)
+  (make-array dims :initial-element 0d0))
 
