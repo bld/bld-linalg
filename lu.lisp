@@ -66,3 +66,9 @@
 	 do (dotimes (i n)
 	      (setf (aref ainv i j) (aref xi i 0)))))
     ainv))
+
+(defun solve (a b)
+  "Solve x in the equation Ax=b, given matrix A and column vector b"
+  (multiple-value-bind (aout l u) (outer-prod-gauss-elim a)
+    (declare (ignore aout))
+    (back-subs-row u (for-subs-row l b))))
