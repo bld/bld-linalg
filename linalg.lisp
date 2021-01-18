@@ -195,3 +195,11 @@
 (defun zeros (&rest dims)
   (make-array dims :initial-element 0d0))
 
+(defmethod two.* ((a array) (b array))
+  (mapm #'* a b))
+
+(defun .* (m &rest args)
+  (if args
+      (reduce #'two.* (cons m args))
+      m))
+
